@@ -15,11 +15,38 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         Dashboard
                     </x-nav-link>
-                    @can('shared.periods.manage')
-                        <x-nav-link :href="route('admin.periods.index')" :active="request()->routeIs('admin.periods.*')">
-                            Periode
+
+                    @can('surat.view')
+                        <x-nav-link
+                            :href="Route::has('surat-keluar.index') ? route('surat-keluar.index') : '#'"
+                            :active="request()->routeIs('surat-keluar.*')">
+                            Surat Keluar
                         </x-nav-link>
                     @endcan
+
+                    @canany(['dokumen.view', 'aset.view'])
+                        <x-nav-link
+                            :href="Route::has('dokumen-aset.dokumen.index') ? route('dokumen-aset.dokumen.index') : '#'"
+                            :active="request()->routeIs('dokumen-aset.*')">
+                            Dokumen &amp; Aset
+                        </x-nav-link>
+                    @endcanany
+
+                    @can('kegiatan.view')
+                        <x-nav-link
+                            :href="Route::has('kegiatan.index') ? route('kegiatan.index') : '#'"
+                            :active="request()->routeIs('kegiatan.*')">
+                            Kegiatan
+                        </x-nav-link>
+                    @endcan
+
+                    @canany(['shared.periods.manage', 'shared.users.view'])
+                        <x-nav-link
+                            :href="route('admin.periods.index')"
+                            :active="request()->routeIs('admin.*')">
+                            Admin
+                        </x-nav-link>
+                    @endcanany
                 </div>
             </div>
 
@@ -29,7 +56,6 @@
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
                             <div>{{ Auth::user()->name }}</div>
-
                             <div class="ms-1">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
@@ -40,17 +66,15 @@
 
                     <x-slot name="content">
                         <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
+                            {{ __('Profil Saya') }}
                         </x-dropdown-link>
 
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-
                             <x-dropdown-link :href="route('logout')"
-                                    onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                                {{ __('Log Out') }}
+                                    onclick="event.preventDefault(); this.closest('form').submit();">
+                                {{ __('Keluar') }}
                             </x-dropdown-link>
                         </form>
                     </x-slot>
@@ -75,11 +99,38 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 Dashboard
             </x-responsive-nav-link>
-            @can('shared.periods.manage')
-                <x-responsive-nav-link :href="route('admin.periods.index')" :active="request()->routeIs('admin.periods.*')">
-                    Periode
+
+            @can('surat.view')
+                <x-responsive-nav-link
+                    :href="Route::has('surat-keluar.index') ? route('surat-keluar.index') : '#'"
+                    :active="request()->routeIs('surat-keluar.*')">
+                    Surat Keluar
                 </x-responsive-nav-link>
             @endcan
+
+            @canany(['dokumen.view', 'aset.view'])
+                <x-responsive-nav-link
+                    :href="Route::has('dokumen-aset.dokumen.index') ? route('dokumen-aset.dokumen.index') : '#'"
+                    :active="request()->routeIs('dokumen-aset.*')">
+                    Dokumen &amp; Aset
+                </x-responsive-nav-link>
+            @endcanany
+
+            @can('kegiatan.view')
+                <x-responsive-nav-link
+                    :href="Route::has('kegiatan.index') ? route('kegiatan.index') : '#'"
+                    :active="request()->routeIs('kegiatan.*')">
+                    Kegiatan
+                </x-responsive-nav-link>
+            @endcan
+
+            @canany(['shared.periods.manage', 'shared.users.view'])
+                <x-responsive-nav-link
+                    :href="route('admin.periods.index')"
+                    :active="request()->routeIs('admin.*')">
+                    Admin
+                </x-responsive-nav-link>
+            @endcanany
         </div>
 
         <!-- Responsive Settings Options -->
@@ -91,17 +142,15 @@
 
             <div class="mt-3 space-y-1">
                 <x-responsive-nav-link :href="route('profile.edit')">
-                    {{ __('Profile') }}
+                    {{ __('Profil Saya') }}
                 </x-responsive-nav-link>
 
                 <!-- Authentication -->
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-
                     <x-responsive-nav-link :href="route('logout')"
-                            onclick="event.preventDefault();
-                                        this.closest('form').submit();">
-                        {{ __('Log Out') }}
+                            onclick="event.preventDefault(); this.closest('form').submit();">
+                        {{ __('Keluar') }}
                     </x-responsive-nav-link>
                 </form>
             </div>
