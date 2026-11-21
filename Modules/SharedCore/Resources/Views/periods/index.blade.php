@@ -1,18 +1,16 @@
 <x-app-layout>
-    <x-slot name="header">
-        <div class="flex items-center justify-between">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Periode Kepengurusan
-            </h2>
-            <a href="{{ route('admin.periods.create') }}"
-               class="px-4 py-2 bg-indigo-600 text-white text-sm rounded-md hover:bg-indigo-700">
-                + Tambah Periode
-            </a>
-        </div>
-    </x-slot>
+    <x-slot name="header">Periode Kepengurusan</x-slot>
 
-    <div class="py-12">
-        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
+    <div class="py-4">
+        <div class="max-w-4xl mx-auto">
+
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-semibold text-gray-800">Daftar Periode</h2>
+                <a href="{{ route('admin.periods.create') }}"
+                   class="px-4 py-2 bg-green-700 text-white text-sm rounded-lg hover:bg-green-800 transition-colors">
+                    + Tambah Periode
+                </a>
+            </div>
 
             @if (session('success'))
                 <div class="mb-4 p-4 bg-green-100 text-green-800 rounded-md">
