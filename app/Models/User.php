@@ -4,9 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Modules\SharedCore\Models\Role;
+use Modules\SharedCore\Models\SignatureImage;
 
 class User extends Authenticatable
 {
@@ -51,5 +54,22 @@ class User extends Authenticatable
         return $this->roles()
             ->whereHas('permissions', fn ($q) => $q->where('slug', $permissionSlug))
             ->exists();
+    }
+
+    public function signatureImages(): HasMany
+    {
+        return $this->hasMany(SignatureImage::class);
+    }
+
+    public function activeSignature(): HasOne
+    {
+        return $this->hasOne(SignatureImage::class)
+            ->where('is_active', true)
+            ->latest('id');
+    }
+
+    public function hasActiveSignature(): bool
+    {
+        return $this->activeSignature()->exists();
     }
 }
