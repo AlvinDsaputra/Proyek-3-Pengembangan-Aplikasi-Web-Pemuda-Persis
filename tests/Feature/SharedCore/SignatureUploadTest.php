@@ -319,27 +319,32 @@ class SignatureUploadTest extends TestCase
         $this->delete(route('shared.signature.destroy'))->assertRedirect(route('login'));
     }
 
-    public function test_anggota_without_permission_receives_403_on_all_signature_endpoints(): void
+    public function test_roles_without_signature_permission_receive_403_on_all_signature_endpoints(): void
     {
-        $anggota = $this->createUserWithRole('anggota');
+        foreach (['superadmin', 'bidang_administrasi', 'anggota'] as $roleSlug) {
+            $user = $this->createUserWithRole($roleSlug);
 
-        $this->actingAs($anggota)
-            ->get(route('shared.signature.edit'))
-            ->assertForbidden();
+            $this->actingAs($user)
+                ->get(route('shared.signature.edit'))
+                ->assertForbidden();
 
-        $this->actingAs($anggota)
-            ->post(route('shared.signature.store'), [
-                'signature' => UploadedFile::fake()->image('ttd.png', 200, 80),
-            ])
-            ->assertForbidden();
+            $this->actingAs($user)
+                ->post(route('shared.signature.store'), [
+                    'signature' => UploadedFile::fake()->image('ttd.png', 200, 80),
+                ])
+                ->assertForbidden();
 
-        $this->actingAs($anggota)
-            ->get(route('shared.signature.preview'))
-            ->assertForbidden();
+            $this->actingAs($user)
+                ->get(route('shared.signature.preview'))
+                ->assertForbidden();
 
-        $this->actingAs($anggota)
-            ->delete(route('shared.signature.destroy'))
-            ->assertForbidden();
+            $this->actingAs($user)
+                ->delete(route('shared.signature.destroy'))
+                ->assertForbidden();
+        }
+
+        $this->assertDatabaseCount('signature_images', 0);
+        $this->assertSame([], Storage::disk('local')->allFiles());
     }
 
     public function test_signature_image_policy_denies_other_users_and_superadmin(): void
@@ -367,9 +372,12 @@ class SignatureUploadTest extends TestCase
             ->assertNotFound();
 
         $this->actingAs($superadmin)
+            ->get(route('shared.signature.preview'))
+            ->assertForbidden();
+
+        $this->actingAs($superadmin)
             ->delete(route('shared.signature.destroy'))
-            ->assertRedirect(route('shared.signature.edit'))
-            ->assertSessionHas('error');
+            ->assertForbidden();
 
         $this->assertTrue($signature->fresh()->is_active);
     }
