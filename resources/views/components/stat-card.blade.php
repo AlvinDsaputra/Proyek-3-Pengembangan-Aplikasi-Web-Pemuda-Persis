@@ -1,26 +1,52 @@
-@props(['label', 'value', 'note' => null, 'color' => 'green'])
+@props([
+    'label',
+    'value',
+    'note' => null,
+    'tone' => null,
+    'color' => 'neutral',
+])
 
 @php
-$border = match($color) {
-    'blue'   => 'border-blue-400',
-    'yellow' => 'border-yellow-400',
-    'orange' => 'border-orange-400',
-    'gray'   => 'border-gray-300',
-    default  => 'border-green-500',
-};
-$valueColor = match($color) {
-    'blue'   => 'text-blue-600',
-    'yellow' => 'text-yellow-600',
-    'orange' => 'text-orange-600',
-    'gray'   => 'text-gray-600',
-    default  => 'text-green-700',
-};
+    $resolvedTone = $tone ?? match ($color) {
+        'green' => 'accent',
+        'yellow', 'orange', 'amber' => 'warning',
+        'red' => 'danger',
+        default => 'neutral',
+    };
+
+    $cardClasses = match ($resolvedTone) {
+        'accent' => 'bg-green-50 border-green-700',
+        'warning' => 'bg-amber-50 border-amber-700',
+        'danger' => 'bg-red-50 border-red-700',
+        default => 'bg-white border-gray-200',
+    };
+
+    $labelClasses = match ($resolvedTone) {
+        'accent' => 'text-gray-700',
+        'warning' => 'text-amber-800',
+        'danger' => 'text-red-800',
+        default => 'text-gray-600',
+    };
+
+    $valueClasses = match ($resolvedTone) {
+        'accent' => 'text-green-800',
+        'warning' => 'text-amber-900',
+        'danger' => 'text-red-800',
+        default => 'text-gray-900',
+    };
+
+    $noteClasses = match ($resolvedTone) {
+        'accent' => 'text-gray-700',
+        'warning' => 'text-amber-800',
+        'danger' => 'text-red-800',
+        default => 'text-gray-600',
+    };
 @endphp
 
-<div class="bg-white rounded-xl shadow-sm p-4 border-l-4 {{ $border }}">
-    <p class="text-xs text-gray-500 font-medium leading-tight">{{ $label }}</p>
-    <p class="text-2xl font-bold {{ $valueColor }} mt-1">{{ $value }}</p>
-    @if($note)
-        <p class="text-xs text-gray-400 mt-0.5 truncate">{{ $note }}</p>
+<div {{ $attributes->merge(['class' => "min-w-0 rounded-xl border p-4 sm:p-5 {$cardClasses}"]) }}>
+    <p class="text-xs font-semibold leading-snug {{ $labelClasses }}">{{ $label }}</p>
+    <p class="mt-2 text-2xl font-bold tracking-tight break-words {{ $valueClasses }}">{{ $value }}</p>
+    @if (filled($note))
+        <p class="mt-1.5 text-xs leading-relaxed {{ $noteClasses }}">{{ $note }}</p>
     @endif
 </div>
