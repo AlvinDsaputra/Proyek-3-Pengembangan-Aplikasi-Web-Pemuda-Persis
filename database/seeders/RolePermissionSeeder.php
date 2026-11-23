@@ -50,12 +50,18 @@ class RolePermissionSeeder extends Seeder
             ['name' => 'Upload Dokumen',          'slug' => 'dokumen.create',             'module' => 'DokumenAset'],
             ['name' => 'Edit Dokumen',            'slug' => 'dokumen.edit',               'module' => 'DokumenAset'],
             ['name' => 'Hapus Dokumen',           'slug' => 'dokumen.delete',             'module' => 'DokumenAset'],
-            ['name' => 'Verifikasi Dokumen',      'slug' => 'dokumen.verify',             'module' => 'DokumenAset'],
             // DokumenAset — Aset
             ['name' => 'Lihat Aset',              'slug' => 'aset.view',                  'module' => 'DokumenAset'],
             ['name' => 'Buat Aset',               'slug' => 'aset.create',                'module' => 'DokumenAset'],
             ['name' => 'Edit Aset',               'slug' => 'aset.edit',                  'module' => 'DokumenAset'],
             ['name' => 'Hapus Aset',              'slug' => 'aset.delete',                'module' => 'DokumenAset'],
+
+            // DokumenAset — tambahan (konfirmasi Tim 7, 2026-11-22)
+            ['name' => 'Update Status Surat Masuk', 'slug' => 'surat-masuk.status.update', 'module' => 'DokumenAset'],
+            ['name' => 'Atur Visibilitas Dokumen',  'slug' => 'dokumen.set-visibility',    'module' => 'DokumenAset'],
+            ['name' => 'Kelola Kategori Dokumen',   'slug' => 'dokumen.kategori.manage',   'module' => 'DokumenAset'],
+            ['name' => 'Laporan Dokumen',            'slug' => 'dokumen.report',            'module' => 'DokumenAset'],
+            ['name' => 'Cetak Label QR Aset',       'slug' => 'aset.label',                'module' => 'DokumenAset'],
 
             // Kegiatan
             ['name' => 'Lihat Kegiatan',          'slug' => 'kegiatan.view',              'module' => 'Kegiatan'],
@@ -63,6 +69,9 @@ class RolePermissionSeeder extends Seeder
             ['name' => 'Edit Kegiatan',           'slug' => 'kegiatan.edit',              'module' => 'Kegiatan'],
             ['name' => 'Hapus Kegiatan',          'slug' => 'kegiatan.delete',            'module' => 'Kegiatan'],
             ['name' => 'Daftar Kegiatan',         'slug' => 'kegiatan.register',          'module' => 'Kegiatan'],
+            // Kegiatan — tambahan (konfirmasi Tim 9, 2026-11-22)
+            ['name' => 'Kelola Absensi Kegiatan', 'slug' => 'kegiatan.attendance.manage', 'module' => 'Kegiatan'],
+            ['name' => 'Laporan Kegiatan',        'slug' => 'kegiatan.report.view',       'module' => 'Kegiatan'],
         ];
 
         $map = [];
@@ -84,7 +93,7 @@ class RolePermissionSeeder extends Seeder
             collect($permissions)->except('surat.approval.approve')->pluck('id')
         );
 
-        // Ketua — setujui surat, verifikasi dokumen, lihat semua; TIDAK edit konten
+        // Ketua — setujui surat, lihat laporan; TIDAK edit konten, TIDAK verifikasi dokumen
         $ketua = Role::firstOrCreate(['slug' => 'ketua'], [
             'name' => 'Ketua',
             'description' => 'Ketua PD Pemuda Persis',
@@ -94,16 +103,16 @@ class RolePermissionSeeder extends Seeder
                 'shared.org-profile.view',
                 'shared.signature.upload',
                 'surat.view', 'surat.approval.approve',
-                'dokumen.view', 'dokumen.verify',
+                'dokumen.view', 'dokumen.report',
                 'aset.view',
-                'kegiatan.view',
+                'kegiatan.view', 'kegiatan.report.view',
             ])->pluck('id')
         );
 
-        // Sekretaris — buat/ajukan surat; lihat dokumen & kegiatan
+        // Sekretaris — surat, dokumen, kegiatan (konfirmasi Tim 7 & Tim 9, 2026-11-22)
         $sekretaris = Role::firstOrCreate(['slug' => 'sekretaris'], [
             'name' => 'Sekretaris',
-            'description' => 'Sekretaris PD Pemuda Persis; bertanggung jawab surat menyurat',
+            'description' => 'Sekretaris PD Pemuda Persis; bertanggung jawab surat, dokumen, dan kegiatan',
         ]);
         $sekretaris->permissions()->sync(
             collect($permissions)->only([
@@ -111,17 +120,18 @@ class RolePermissionSeeder extends Seeder
                 'shared.signature.upload',
                 'surat.view', 'surat.draft.create', 'surat.draft.edit',
                 'surat.draft.delete', 'surat.draft.submit',
-                'surat-masuk.create',       // hanya sekretaris yang catat surat masuk (BR-02 Tim 7)
-                'dokumen.view',
-                'aset.view',
-                'kegiatan.view',
+                'surat-masuk.create', 'surat-masuk.status.update',
+                'dokumen.view', 'dokumen.create', 'dokumen.edit', 'dokumen.delete',
+                'dokumen.set-visibility', 'dokumen.kategori.manage', 'dokumen.report',
+                'aset.view', 'aset.delete',
+                'kegiatan.view', 'kegiatan.create', 'kegiatan.edit', 'kegiatan.delete',
             ])->pluck('id')
         );
 
-        // Bidang Administrasi — master data surat, kelola dokumen & aset
+        // Bidang Administrasi — master data surat, arsip dokumen, inventaris aset (konfirmasi Tim 7, 2026-11-22)
         $bidangAdmin = Role::firstOrCreate(['slug' => 'bidang_administrasi'], [
             'name' => 'Bidang Administrasi',
-            'description' => 'Bidang Administrasi PD; bertanggung jawab master data surat, dokumen, arsip, dan aset',
+            'description' => 'Bidang Administrasi PD; bertanggung jawab master data surat, pengarsipan dokumen, dan inventaris aset',
         ]);
         $bidangAdmin->permissions()->sync(
             collect($permissions)->only([
@@ -129,9 +139,9 @@ class RolePermissionSeeder extends Seeder
                 'shared.signature.upload',
                 'surat.jenis.manage', 'surat.kode.manage', 'surat.template.manage',
                 'surat.view',
-                'dokumen.view', 'dokumen.create', 'dokumen.edit', 'dokumen.delete',
-                'aset.view', 'aset.create', 'aset.edit', 'aset.delete',
-                'kegiatan.view',
+                'dokumen.view', 'dokumen.create', 'dokumen.kategori.manage',
+                'aset.view', 'aset.create', 'aset.edit', 'aset.label',
+                'kegiatan.view', 'kegiatan.attendance.manage', 'kegiatan.report.view',
             ])->pluck('id')
         );
 
@@ -144,7 +154,6 @@ class RolePermissionSeeder extends Seeder
             collect($permissions)->only([
                 'surat.view',
                 'dokumen.view',
-                'aset.view',
                 'kegiatan.view', 'kegiatan.register',
             ])->pluck('id')
         );
