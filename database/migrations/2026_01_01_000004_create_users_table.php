@@ -14,10 +14,11 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string('npa', 50)->nullable()->unique();
-            // FK ke provincial_branches bisa null (admin tidak wajib punya PC)
-            $table->foreignId('asal_pc_id')
-                ->nullable()
-                ->constrained('provincial_branches')
+            // FK ke provincial_branches.code (varchar); null = admin/pengguna tanpa PC
+            $table->string('asal_pc_code', 20)->nullable();
+            $table->foreign('asal_pc_code')
+                ->references('code')
+                ->on('provincial_branches')
                 ->nullOnDelete();
             $table->boolean('is_active')->default(true);
             $table->timestamp('email_verified_at')->nullable();

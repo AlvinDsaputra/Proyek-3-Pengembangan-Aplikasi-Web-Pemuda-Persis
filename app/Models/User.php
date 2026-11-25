@@ -17,7 +17,7 @@ class User extends Authenticatable
         'email',
         'password',
         'npa',
-        'asal_pc_id',
+        'asal_pc_code',
         'is_active',
     ];
 

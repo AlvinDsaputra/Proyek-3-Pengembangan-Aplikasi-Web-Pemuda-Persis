@@ -9,9 +9,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('provincial_branches', function (Blueprint $table) {
-            $table->id();
+            $table->string('code', 20)->primary();
             $table->string('name');
-            $table->string('code', 20)->unique();
             $table->string('region')->nullable();
             $table->timestamps();
         });

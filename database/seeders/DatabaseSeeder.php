@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
+            ProvincialBranchSeeder::class,   // wajib sebelum UserSeeder (NPA referensi kode PC)
             RolePermissionSeeder::class,
             OrganizationalPeriodSeeder::class,
             UserSeeder::class,
