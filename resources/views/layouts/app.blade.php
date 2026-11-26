@@ -7,21 +7,38 @@
 
         <title>{{ isset($header) ? trim(strip_tags($header)) . ' - ' : '' }}{{ config('app.name', 'PD Pemuda Persis') }}</title>
 
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet" />
+        <link rel="preconnect" href="https://fonts.bunny.net" crossorigin>
+        <link
+            rel="stylesheet"
+            href="https://fonts.bunny.net/css?family=plus-jakarta-sans:400,500,600,700&display=swap"
+            media="print"
+            onload="this.media='all'"
+        >
+        <noscript>
+            <link rel="stylesheet" href="https://fonts.bunny.net/css?family=plus-jakarta-sans:400,500,600,700&display=swap">
+        </noscript>
+
+        <script>
+            try {
+                if (window.localStorage.getItem('pp_sidebar_collapsed') === 'true') {
+                    document.documentElement.classList.add('sidebar-collapsed');
+                }
+            } catch (e) {}
+        </script>
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans antialiased bg-gray-100 text-gray-900">
+    <body class="font-sans antialiased bg-alabaster text-ink lg:bg-pine">
         @auth
             @php
-                $userRole = Auth::user()->primaryRole();
+                $authUser = Auth::user();
+                $userRole = $userRole ?? $authUser->roles()->first();
             @endphp
         @endauth
 
         <a
             href="#main-content"
-            class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded-lg focus:bg-green-800 focus:px-4 focus:py-2.5 focus:text-sm focus:font-semibold focus:text-white focus:outline-none focus:ring-2 focus:ring-green-700 focus:ring-offset-2"
+            class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded-xl focus:bg-brand focus:px-4 focus:py-2.5 focus:text-sm focus:font-semibold focus:text-white focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2"
         >
             Langsung ke konten utama
         </a>
@@ -29,6 +46,34 @@
         <div
             x-data="{
                 sidebarOpen: false,
+                sidebarCollapsed: document.documentElement.classList.contains('sidebar-collapsed'),
+                sidebarReady: false,
+                init() {
+                    this.syncCollapseFromStorage();
+                    window.requestAnimationFrame(() => {
+                        window.requestAnimationFrame(() => {
+                            this.sidebarReady = true;
+                        });
+                    });
+                },
+                syncCollapseFromStorage() {
+                    let collapsed = false;
+                    try {
+                        collapsed = window.localStorage.getItem('pp_sidebar_collapsed') === 'true';
+                    } catch (e) {}
+                    this.sidebarCollapsed = collapsed;
+                    document.documentElement.classList.toggle('sidebar-collapsed', collapsed);
+                },
+                handlePageShow(event) {
+                    if (!event.persisted) return;
+                    this.sidebarReady = false;
+                    this.syncCollapseFromStorage();
+                    window.requestAnimationFrame(() => {
+                        window.requestAnimationFrame(() => {
+                            this.sidebarReady = true;
+                        });
+                    });
+                },
                 openSidebar() {
                     this.sidebarOpen = true;
                     this.$nextTick(() => this.$refs.closeSidebarBtn?.focus());
@@ -36,31 +81,41 @@
                 closeSidebar() {
                     this.sidebarOpen = false;
                     this.$nextTick(() => this.$refs.menuTrigger?.focus());
+                },
+                toggleCollapse() {
+                    this.sidebarCollapsed = !this.sidebarCollapsed;
+                    document.documentElement.classList.toggle('sidebar-collapsed', this.sidebarCollapsed);
+                    try {
+                        window.localStorage.setItem('pp_sidebar_collapsed', this.sidebarCollapsed ? 'true' : 'false');
+                    } catch (e) {}
                 }
             }"
             @keydown.escape.window="if (sidebarOpen) closeSidebar()"
-            class="min-h-screen flex bg-gray-100 lg:h-screen lg:overflow-hidden"
+            @pageshow.window="handlePageShow($event)"
+            @resize.window="if (sidebarOpen && window.innerWidth >= 1024) sidebarOpen = false"
+            class="flex min-h-screen bg-alabaster lg:h-screen lg:overflow-hidden lg:bg-pine"
         >
             <div
                 x-show="sidebarOpen"
+                x-transition.opacity.duration.200ms
                 x-cloak
                 @click="closeSidebar()"
-                class="fixed inset-0 z-30 bg-gray-900/50 lg:hidden"
+                class="fixed inset-0 z-30 bg-pine-deep/60 backdrop-blur-[2px] lg:hidden"
                 aria-hidden="true"
             ></div>
 
             @include('layouts.navigation')
 
-            <div class="flex flex-col flex-1 min-w-0 lg:overflow-hidden">
-                <header class="sticky top-0 z-20 bg-white border-b border-gray-200 min-h-[56px] flex items-center justify-between gap-3 px-4 sm:px-6 shrink-0">
-                    <div class="flex items-center gap-3 min-w-0">
+            <div class="flex min-w-0 flex-1 flex-col bg-alabaster lg:my-2.5 lg:mr-2.5 lg:overflow-hidden lg:rounded-[22px] lg:shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_20px_40px_-20px_rgba(0,0,0,0.35)]">
+                <header class="sticky top-0 z-20 flex h-16 shrink-0 items-center justify-between gap-4 border-b border-stone-line/80 bg-alabaster/95 px-5 backdrop-blur-sm sm:px-7">
+                    <div class="flex min-w-0 items-center gap-3">
                         <button
                             type="button"
                             x-ref="menuTrigger"
                             @click="sidebarOpen ? closeSidebar() : openSidebar()"
                             :aria-expanded="sidebarOpen ? 'true' : 'false'"
                             aria-controls="app-sidebar"
-                            class="lg:hidden inline-flex min-h-[44px] items-center gap-2 rounded-lg border border-gray-500 bg-white px-3 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900 active:bg-gray-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-700 focus-visible:ring-offset-2 shrink-0"
+                            class="inline-flex min-h-[44px] shrink-0 items-center gap-2 rounded-xl border border-stone-line bg-white px-3 py-2 text-sm font-medium text-ink shadow-sm transition-colors duration-150 ease-spring hover:bg-stone-soft active:bg-stone-line/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-alabaster lg:hidden"
                         >
                             <svg class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
@@ -68,41 +123,37 @@
                             <span>Menu</span>
                         </button>
 
-                        <div class="min-w-0 text-gray-800 font-semibold text-sm sm:text-base truncate">
+                        <h1 class="min-w-0 truncate text-base font-semibold tracking-tight text-ink sm:text-lg">
                             @isset($header)
                                 {{ $header }}
                             @endisset
-                        </div>
+                        </h1>
                     </div>
 
-                    <div class="flex items-center gap-3 shrink-0">
+                    <div class="flex shrink-0 items-center">
                         @auth
-                            @if (isset($userRole) && $userRole)
-                                <span class="hidden md:inline-flex items-center text-xs text-gray-600">
-                                    Peran:
-                                    <span class="ml-1 font-semibold text-gray-800">{{ $userRole->name }}</span>
-                                </span>
-                            @endif
-
-                            <x-dropdown align="right" width="48">
+                            <x-dropdown align="right" width="48" contentClasses="py-1.5 bg-white border border-stone-line rounded-xl">
                                 <x-slot name="trigger">
                                     <button
                                         type="button"
-                                        aria-label="Menu akun {{ Auth::user()->name }}"
-                                        class="inline-flex min-h-[44px] items-center gap-2 rounded-lg px-2.5 py-1.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900 active:bg-gray-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-700 focus-visible:ring-offset-2"
+                                        aria-label="Menu akun {{ $authUser->name }}"
+                                        class="inline-flex min-h-[44px] items-center gap-2.5 rounded-xl px-2 py-1.5 text-left transition-colors duration-150 ease-spring hover:bg-stone-soft/80 active:bg-stone-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-alabaster"
                                     >
-                                        <span class="flex h-7 w-7 items-center justify-center rounded-full bg-green-800 text-xs font-bold text-white shrink-0" aria-hidden="true">
-                                            {{ mb_strtoupper(mb_substr(Auth::user()->name, 0, 1)) }}
+                                        <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-pine text-xs font-semibold text-white" aria-hidden="true">
+                                            {{ mb_strtoupper(mb_substr($authUser->name, 0, 1)) }}
                                         </span>
-                                        <span class="hidden sm:inline max-w-[9rem] truncate">{{ Auth::user()->name }}</span>
-                                        <svg class="h-4 w-4 text-gray-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                        <span class="hidden min-w-0 sm:block">
+                                            <span class="block max-w-[10rem] truncate text-sm font-semibold leading-tight text-ink">{{ $authUser->name }}</span>
+                                            <span class="block max-w-[10rem] truncate text-xs leading-tight text-ink-muted">{{ $userRole?->name ?? 'Pengguna' }}</span>
+                                        </span>
+                                        <svg class="h-4 w-4 shrink-0 text-ink-muted" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                                         </svg>
                                     </button>
                                 </x-slot>
 
                                 <x-slot name="content">
-                                    <x-dropdown-link :href="route('profile.edit')" class="min-h-[44px] flex items-center">
+                                    <x-dropdown-link :href="route('profile.edit')" class="flex min-h-[44px] items-center text-ink transition-colors duration-150 hover:bg-alabaster focus:bg-alabaster">
                                         Profil Saya
                                     </x-dropdown-link>
 
@@ -110,7 +161,7 @@
                                         @csrf
                                         <button
                                             type="submit"
-                                            class="flex min-h-[44px] w-full items-center px-4 py-2 text-start text-sm leading-5 text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-none focus-visible:bg-gray-100"
+                                            class="flex min-h-[44px] w-full items-center px-4 py-2 text-start text-sm leading-5 text-ink transition-colors duration-150 hover:bg-alabaster focus-visible:bg-alabaster focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand"
                                         >
                                             Keluar
                                         </button>
@@ -121,7 +172,7 @@
                     </div>
                 </header>
 
-                <main id="main-content" tabindex="-1" class="flex-1 min-w-0 lg:overflow-y-auto px-4 py-5 sm:px-6 sm:py-6 focus:outline-none">
+                <main id="main-content" tabindex="-1" class="min-w-0 flex-1 px-5 py-6 sm:px-7 sm:py-7 lg:overflow-y-auto focus:outline-none">
                     {{ $slot }}
                 </main>
             </div>

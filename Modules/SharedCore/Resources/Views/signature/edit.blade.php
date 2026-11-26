@@ -19,54 +19,18 @@
             maxWidth: 3000,
             maxHeight: 3000
         })"
-        class="max-w-6xl mx-auto space-y-5 sm:space-y-6 pb-8"
+        class="mx-auto max-w-6xl space-y-5 pb-8"
     >
-        <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between border-b border-gray-200 pb-4">
-            <div class="min-w-0">
-                <h1 class="text-xl sm:text-2xl font-semibold text-gray-900 tracking-tight">
-                    Tanda Tangan Digital Resmi
-                </h1>
-                <p class="mt-1 text-sm text-gray-600 max-w-2xl">
-                    Kelola berkas tanda tangan PNG yang dibubuhkan pada dokumen surat keluar resmi PD Pemuda Persis Kab. Bandung.
-                </p>
-            </div>
-
-            <div class="shrink-0">
-                @if ($hasActiveSignature)
-                    <span class="inline-flex items-center gap-2 rounded-md border border-green-700 bg-green-50 px-3 py-1.5 text-xs font-semibold text-green-800">
-                        <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                        </svg>
-                        Tanda tangan aktif
-                    </span>
-                @elseif ($hasMissingFile)
-                    <span class="inline-flex items-center gap-2 rounded-md border border-red-700 bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-800">
-                        <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.29 3.86l-7.5 13A1 1 0 003.66 18h16.68a1 1 0 00.87-1.5l-7.5-13a1 1 0 00-1.74 0z" />
-                        </svg>
-                        Berkas tidak ditemukan
-                    </span>
-                @else
-                    <span class="inline-flex items-center gap-2 rounded-md border border-gray-500 bg-gray-100 px-3 py-1.5 text-xs font-semibold text-gray-700">
-                        <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        Belum ada tanda tangan
-                    </span>
-                @endif
-            </div>
-        </div>
-
         @if (session('success'))
             <div
                 role="status"
                 aria-live="polite"
-                class="flex items-start gap-3 rounded-lg border border-green-700 bg-green-50 px-4 py-3.5 text-sm text-green-800"
+                class="squircle flex items-center gap-2.5 rounded-2xl border border-brand/20 bg-brand-soft px-4 py-3 text-sm font-medium text-brand-ink"
             >
-                <svg class="mt-0.5 h-5 w-5 shrink-0 text-green-800" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
-                <p class="font-medium">{{ session('success') }}</p>
+                <span>{{ session('success') }}</span>
             </div>
         @endif
 
@@ -74,24 +38,28 @@
             <div
                 role="alert"
                 aria-live="assertive"
-                class="flex items-start gap-3 rounded-lg border border-red-700 bg-red-50 px-4 py-3.5 text-sm text-red-800"
+                class="squircle flex items-center gap-2.5 rounded-2xl border border-danger-border/35 bg-danger-bg px-4 py-3 text-sm font-medium text-danger"
             >
-                <svg class="mt-0.5 h-5 w-5 shrink-0 text-red-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <p class="font-medium">{{ session('error') }}</p>
+                <span>{{ session('error') }}</span>
             </div>
         @endif
 
-        <div class="grid grid-cols-1 gap-5 lg:grid-cols-12 lg:gap-6 lg:items-start">
-            <section class="min-w-0 lg:col-span-7 bg-white border border-gray-200 rounded-xl shadow-sm divide-y divide-gray-200">
-                <div class="p-4 sm:p-6">
-                    <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                        <div class="min-w-0">
-                            <h2 class="text-base font-semibold text-gray-900">Tanda Tangan Tersimpan</h2>
-                            <p class="mt-0.5 text-sm text-gray-600">
-                                Latar kotak abu-abu menandakan area transparan pada gambar PNG.
-                            </p>
+        <div class="grid grid-cols-1 items-start gap-6 lg:grid-cols-12">
+            <section class="surface-card min-w-0 divide-y divide-stone-line/80 lg:col-span-7">
+                <div class="p-5 sm:p-6">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <div class="flex items-center gap-2.5">
+                            <h2 class="text-sm font-semibold text-ink">Status Tanda Tangan</h2>
+                            @if ($hasActiveSignature)
+                                <span class="rounded-full bg-brand-soft px-2.5 py-0.5 text-xs font-semibold text-brand-ink">Aktif</span>
+                            @elseif ($hasMissingFile)
+                                <span class="rounded-full bg-danger-bg px-2.5 py-0.5 text-xs font-semibold text-danger">File hilang</span>
+                            @else
+                                <span class="rounded-full bg-ochre-bg px-2.5 py-0.5 text-xs font-semibold text-ochre">Belum ada</span>
+                            @endif
                         </div>
 
                         @if ($signature)
@@ -99,92 +67,50 @@
                                 type="button"
                                 x-ref="deleteTrigger"
                                 @click="openDeleteModal()"
-                                class="inline-flex min-h-[44px] items-center justify-center gap-2 self-start rounded-lg border border-red-700 bg-red-50 px-3.5 py-2 text-sm font-medium text-red-700 transition-colors hover:bg-red-700 hover:text-white active:bg-red-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-700 focus-visible:ring-offset-2"
+                                class="inline-flex min-h-[44px] items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-medium text-danger transition-colors duration-150 ease-spring hover:bg-danger-bg active:bg-danger-bg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-danger-border focus-visible:ring-offset-2"
                             >
                                 <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                 </svg>
-                                Hapus Tanda Tangan
+                                Hapus
                             </button>
                         @endif
                     </div>
 
                     @if ($hasActiveSignature)
-                        <div class="mt-4">
-                            <div class="signature-checkerboard flex min-h-[144px] items-center justify-center rounded-lg border border-gray-300 p-4">
-                                <img
-                                    src="{{ $signatureUrl }}"
-                                    alt="Tanda tangan digital aktif milik {{ $user->name }}"
-                                    width="320"
-                                    height="128"
-                                    fetchpriority="high"
-                                    decoding="async"
-                                    class="max-h-32 max-w-full w-auto object-contain"
-                                >
-                            </div>
+                        <div class="signature-checkerboard squircle mt-4 flex min-h-[116px] items-center justify-center rounded-xl border border-stone-line/80 p-4">
+                            <img
+                                src="{{ $signatureUrl }}"
+                                alt="Tanda tangan digital aktif milik {{ $user->name }}"
+                                width="320"
+                                height="128"
+                                fetchpriority="high"
+                                decoding="async"
+                                class="max-h-24 max-w-full w-auto object-contain"
+                            >
+                        </div>
 
-                            <dl class="mt-3 flex flex-wrap gap-x-6 gap-y-2 text-xs text-gray-600">
-                                <div>
-                                    <dt class="inline font-medium text-gray-700">Status:</dt>
-                                    <dd class="inline font-semibold text-green-800">Aktif digunakan</dd>
-                                </div>
-                                @if ($uploadedAtLabel)
-                                    <div>
-                                        <dt class="inline font-medium text-gray-700">Terakhir diunggah:</dt>
-                                        <dd class="inline">{{ $uploadedAtLabel }}</dd>
-                                    </div>
-                                @endif
-                                <div>
-                                    <dt class="inline font-medium text-gray-700">Riwayat unggahan:</dt>
-                                    <dd class="inline">{{ $historyCount }} kali</dd>
-                                </div>
-                            </dl>
+                        <div class="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-xs tabular-nums text-ink-muted">
+                            @if ($uploadedAtLabel)
+                                <span>Terakhir diunggah: <strong class="font-medium text-ink">{{ $uploadedAtLabel }}</strong></span>
+                            @endif
+                            <span>Riwayat unggahan: <strong class="font-medium text-ink">{{ $historyCount }} kali</strong></span>
                         </div>
                     @elseif ($hasMissingFile)
-                        <div
-                            role="alert"
-                            class="mt-4 rounded-lg border border-red-700 bg-red-50 p-4 text-sm text-red-800"
-                        >
-                            <p class="font-semibold">Berkas tanda tangan aktif tidak ditemukan di penyimpanan.</p>
-                            <p class="mt-1 text-red-700">
-                                Unggah ulang berkas tanda tangan PNG di bawah ini agar surat keluar resmi tetap dapat dibubuhi tanda tangan Anda.
-                            </p>
-                        </div>
+                        <p role="alert" class="mt-3 rounded-xl border border-danger-border/30 bg-danger-bg px-3.5 py-2.5 text-sm font-medium text-danger">
+                            Berkas tanda tangan aktif tidak ditemukan di penyimpanan. Unggah ulang file PNG di bawah.
+                        </p>
                     @else
-                        <div class="mt-4 rounded-lg border border-dashed border-gray-500 bg-gray-50 px-4 py-6 sm:px-6">
-                            <div class="flex flex-col sm:flex-row sm:items-start gap-3">
-                                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-700">
-                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487z" />
-                                    </svg>
-                                </div>
-                                <div class="min-w-0">
-                                    <p class="text-sm font-semibold text-gray-900">
-                                        Belum ada tanda tangan yang tersimpan
-                                    </p>
-                                    <p class="mt-1 text-sm text-gray-600">
-                                        Surat keluar yang disetujui memerlukan tanda tangan PNG agar dapat dibubuhkan otomatis di PDF resmi. Pilih berkas tanda tangan PNG pada formulir di bawah untuk mulai mengunggah.
-                                    </p>
-                                    @if ($historyCount > 0)
-                                        <p class="mt-2 text-xs text-gray-600">
-                                            Riwayat unggahan sebelumnya: {{ $historyCount }} kali (nonaktif).
-                                        </p>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
+                        <p class="mt-2.5 text-sm text-ink-muted">
+                            Belum ada tanda tangan aktif tersimpan. Unggah berkas PNG transparan di bawah agar siap digunakan saat pengesahan surat.@if ($historyCount > 0) ({{ $historyCount }} riwayat nonaktif.)@endif
+                        </p>
                     @endif
                 </div>
 
-                <div class="p-4 sm:p-6">
-                    <h2 class="text-base font-semibold text-gray-900">
-                        {{ $hasActiveSignature ? 'Ganti Tanda Tangan' : 'Unggah Tanda Tangan Baru' }}
+                <div class="p-5 sm:p-6">
+                    <h2 class="text-sm font-semibold text-ink">
+                        {{ $hasActiveSignature ? 'Ganti Tanda Tangan' : 'Unggah Tanda Tangan' }}
                     </h2>
-                    <p class="mt-0.5 text-sm text-gray-600">
-                        {{ $hasActiveSignature
-                            ? 'Mengunggah berkas baru akan menggantikan tanda tangan aktif saat ini dan menyimpan versi lama di riwayat.'
-                            : 'Siapkan berkas tanda tangan berformat PNG dengan latar belakang transparan.' }}
-                    </p>
 
                     <form
                         method="POST"
@@ -192,7 +118,7 @@
                         enctype="multipart/form-data"
                         @submit="handleSubmit($event)"
                         novalidate
-                        class="mt-4 space-y-4"
+                        class="mt-3.5 space-y-4"
                     >
                         @csrf
 
@@ -201,21 +127,24 @@
                                 for="signature"
                                 :aria-disabled="submitting ? 'true' : 'false'"
                                 @click="if (submitting) $event.preventDefault()"
-                                class="block text-sm font-medium text-gray-900"
+                                class="sr-only"
                             >
-                                Berkas tanda tangan (PNG)
+                                Pilih file tanda tangan PNG
                             </label>
 
                             <div
+                                @dragenter.prevent="if (!submitting) { dragDepth++; isDragging = true; }"
                                 @dragover.prevent="if (!submitting) isDragging = true"
-                                @dragleave.prevent="isDragging = false"
+                                @dragleave.prevent="dragDepth = Math.max(0, dragDepth - 1); if (dragDepth === 0) isDragging = false"
                                 @drop.prevent="handleDrop($event)"
                                 :class="isDragging
-                                    ? 'border-green-700 bg-green-50'
+                                    ? 'border-brand bg-brand-soft/70'
                                     : ((clientError || hasServerError)
-                                        ? 'border-red-700 bg-red-50'
-                                        : 'border-gray-500 bg-gray-50')"
-                                class="mt-2 rounded-lg border-2 border-dashed p-4 sm:p-5 transition-colors focus-within:border-green-700 focus-within:ring-2 focus-within:ring-green-700 focus-within:ring-offset-2"
+                                        ? 'border-danger-border bg-danger-bg/40'
+                                        : (previewUrl
+                                            ? 'border-brand/50 bg-white'
+                                            : 'border-stone-line bg-alabaster/70 hover:border-brand/55 hover:bg-brand-soft/20'))"
+                                class="squircle relative flex min-h-[220px] flex-col overflow-hidden rounded-2xl border-2 border-dashed transition-colors duration-200 ease-spring focus-within:border-brand focus-within:ring-2 focus-within:ring-brand/25"
                             >
                                 <input
                                     id="signature"
@@ -231,104 +160,107 @@
                                     class="sr-only"
                                 >
 
-                                <div class="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
-                                    <div class="flex items-start gap-3 min-w-0">
-                                        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-gray-300 bg-white text-green-800">
-                                            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
-                                            </svg>
-                                        </div>
-                                        <div class="min-w-0">
-                                            <p class="text-sm font-medium text-gray-900">
-                                                <span x-show="!selectedFileName">Seret berkas PNG ke kotak ini atau pilih dari perangkat</span>
-                                                <span x-show="selectedFileName" x-cloak class="break-all" x-text="selectedFileName"></span>
-                                            </p>
-                                            <p id="signature-help" class="mt-0.5 text-xs text-gray-600">
-                                                <span x-show="!selectedFileName">Format PNG saja, ukuran maksimal 2 MB, dimensi 80 x 40 hingga 3000 x 3000 piksel.</span>
-                                                <span x-show="selectedFileName" x-cloak x-text="selectedFileMeta"></span>
-                                            </p>
-                                        </div>
+                                <div
+                                    x-show="!previewUrl"
+                                    class="flex flex-1 flex-col items-center justify-center px-5 py-7 text-center"
+                                >
+                                    <div
+                                        aria-hidden="true"
+                                        class="squircle mb-3 flex h-11 w-11 items-center justify-center rounded-xl border border-stone-line bg-white text-brand shadow-sm"
+                                    >
+                                        <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                                        </svg>
                                     </div>
 
-                                    <label
-                                        for="signature"
-                                        :aria-disabled="submitting ? 'true' : 'false'"
-                                        @click="if (submitting) $event.preventDefault()"
+                                    <p class="text-sm font-semibold text-ink">
+                                        Seret file PNG ke area ini
+                                    </p>
+                                    <p id="signature-help" class="mt-1 max-w-sm text-xs leading-relaxed text-ink-muted">
+                                        PNG transparan, maks. 2 MB, dimensi 80 x 40 sampai 3000 x 3000 px.
+                                    </p>
+
+                                    <button
+                                        type="button"
+                                        :disabled="submitting"
+                                        @click="if (!submitting) $refs.fileInput.click()"
                                         :class="submitting
-                                            ? 'border-gray-500 bg-gray-200 text-gray-600'
-                                            : 'border-gray-500 bg-white text-gray-900 hover:bg-gray-100 active:bg-gray-200'"
-                                        class="inline-flex min-h-[44px] w-full sm:w-auto shrink-0 items-center justify-center rounded-lg border px-4 py-2 text-sm font-medium transition-colors"
+                                            ? 'border-stone-line bg-stone-soft text-ink-muted'
+                                            : 'border-stone-line bg-white text-ink hover:border-brand/40 hover:bg-stone-soft/60 active:bg-stone-soft'"
+                                        class="mt-4 inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl border px-4 py-2 text-sm font-medium shadow-sm transition-colors duration-150 ease-spring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
                                     >
-                                        <span x-text="selectedFileName ? 'Ganti Pilihan' : 'Pilih Berkas PNG'"></span>
-                                    </label>
+                                        <svg class="h-4 w-4 text-brand" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                                        </svg>
+                                        <span>Pilih File PNG</span>
+                                    </button>
+                                </div>
+
+                                <div x-show="previewUrl" x-cloak class="relative flex flex-1 flex-col">
+                                    <div class="absolute right-3 top-3 z-10 inline-flex items-center gap-1 rounded-full border border-stone-line bg-white/95 p-1 shadow-sm backdrop-blur-sm">
+                                        <button
+                                            type="button"
+                                            :disabled="submitting"
+                                            @click="if (!submitting) $refs.fileInput.click()"
+                                            class="inline-flex min-h-[44px] items-center rounded-full px-3.5 text-xs font-semibold text-ink transition-colors duration-150 hover:bg-stone-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand disabled:opacity-50"
+                                        >
+                                            Ganti
+                                        </button>
+                                        <button
+                                            type="button"
+                                            @click="clearSelection()"
+                                            :disabled="submitting"
+                                            class="inline-flex min-h-[44px] items-center rounded-full px-3.5 text-xs font-semibold text-danger transition-colors duration-150 hover:bg-danger-bg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-danger-border disabled:opacity-50"
+                                        >
+                                            Batal
+                                        </button>
+                                    </div>
+
+                                    <div class="signature-checkerboard flex min-h-[176px] flex-1 items-center justify-center px-6 pb-5 pt-16">
+                                        <img
+                                            :src="previewUrl"
+                                            alt="Pratinjau lokal tanda tangan PNG baru"
+                                            width="320"
+                                            height="128"
+                                            class="max-h-28 max-w-full w-auto object-contain"
+                                        >
+                                    </div>
+
+                                    <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 border-t border-stone-line/80 bg-alabaster/90 px-4 py-2.5 text-xs">
+                                        <span class="min-w-0 truncate font-medium text-ink" x-text="selectedFileName"></span>
+                                        <span class="shrink-0 tabular-nums text-ink-muted" x-text="selectedFileMeta"></span>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div
+                            <p
                                 id="signature-client-error"
                                 x-show="clientError"
                                 x-cloak
                                 role="alert"
                                 aria-live="assertive"
-                                class="mt-2.5 flex items-start gap-2 rounded-md border border-red-700 bg-red-50 px-3 py-2.5 text-sm text-red-800"
-                            >
-                                <svg class="mt-0.5 h-4 w-4 shrink-0 text-red-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                                <p x-text="clientError"></p>
-                            </div>
+                                class="mt-2 text-sm font-medium text-danger"
+                                x-text="clientError"
+                            ></p>
 
                             @error('signature')
-                                <div
+                                <p
                                     id="signature-server-error"
                                     x-show="hasServerError"
                                     role="alert"
-                                    class="mt-2.5 flex items-start gap-2 rounded-md border border-red-700 bg-red-50 px-3 py-2.5 text-sm text-red-800"
+                                    class="mt-2 text-sm font-medium text-danger"
                                 >
-                                    <svg class="mt-0.5 h-4 w-4 shrink-0 text-red-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                    <p>{{ $message }}</p>
-                                </div>
+                                    {{ $message }}
+                                </p>
                             @enderror
                         </div>
 
-                        <div x-show="previewUrl" x-cloak class="space-y-2.5">
-                            <div class="flex flex-wrap items-center justify-between gap-2">
-                                <p class="text-sm font-medium text-gray-900">Pratinjau berkas yang dipilih</p>
-                                <span class="rounded-md border border-green-700 bg-green-50 px-2 py-0.5 text-xs font-medium text-green-800">
-                                    Siap diunggah
-                                </span>
-                            </div>
-
-                            <div class="signature-checkerboard flex min-h-[144px] items-center justify-center rounded-lg border border-green-700 p-4">
-                                <img
-                                    :src="previewUrl"
-                                    alt="Pratinjau lokal berkas tanda tangan PNG yang baru dipilih"
-                                    width="320"
-                                    height="128"
-                                    class="max-h-32 max-w-full w-auto object-contain"
-                                >
-                            </div>
-                        </div>
-
-                        <div class="flex flex-col-reverse gap-3 pt-1 sm:flex-row sm:items-center sm:justify-end">
-                            <button
-                                type="button"
-                                x-show="previewUrl"
-                                x-cloak
-                                @click="clearSelection()"
-                                :disabled="submitting"
-                                class="inline-flex min-h-[44px] w-full sm:w-auto items-center justify-center rounded-lg border border-gray-500 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 active:bg-gray-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-700 focus-visible:ring-offset-2 disabled:bg-gray-200 disabled:text-gray-600"
-                            >
-                                Batal Pilih
-                            </button>
-
+                        <div class="flex items-center justify-end pt-1">
                             <button
                                 type="submit"
                                 :disabled="submitting"
                                 :aria-busy="submitting ? 'true' : 'false'"
-                                class="inline-flex min-h-[44px] w-full sm:w-auto items-center justify-center gap-2 rounded-lg bg-green-700 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-green-800 active:bg-green-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-700 focus-visible:ring-offset-2 disabled:border disabled:border-gray-500 disabled:bg-gray-200 disabled:text-gray-600"
+                                class="inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl bg-brand px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-[transform,background-color,box-shadow] duration-200 ease-spring hover:-translate-y-0.5 hover:bg-brand-hover active:translate-y-0 active:bg-brand-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 disabled:opacity-60 disabled:hover:translate-y-0 sm:w-auto"
                             >
                                 <svg
                                     x-show="submitting"
@@ -342,99 +274,90 @@
                                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
                                 </svg>
-                                <span x-text="submitting ? 'Menyimpan tanda tangan...' : (hasActiveSignature ? 'Simpan Tanda Tangan Baru' : 'Simpan Tanda Tangan')"></span>
+                                <span x-text="submitting ? 'Menyimpan...' : (hasActiveSignature ? 'Simpan Perubahan' : 'Simpan Tanda Tangan')">{{ $hasActiveSignature ? 'Simpan Perubahan' : 'Simpan Tanda Tangan' }}</span>
                             </button>
                         </div>
                     </form>
                 </div>
             </section>
 
-            <aside class="min-w-0 lg:col-span-5 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-1">
-                <section class="bg-white border border-gray-200 rounded-xl p-4 sm:p-5">
-                    <div class="flex items-start justify-between gap-2">
-                        <div class="min-w-0">
-                            <h2 class="text-base font-semibold text-gray-900">Simulasi di Surat Resmi</h2>
-                            <p class="mt-0.5 text-xs text-gray-600">
-                                Gambaran posisi tanda tangan Anda pada bagian pengesahan surat keluar PDF.
-                            </p>
-                        </div>
+            <aside class="min-w-0 space-y-5 lg:col-span-5">
+                <div class="surface-card overflow-hidden">
+                    <div class="h-1.5 w-full bg-pine" aria-hidden="true"></div>
+
+                    <div class="flex items-center justify-between gap-2 border-b border-stone-line/80 px-6 py-4">
+                        <h2 class="text-sm font-semibold text-ink">Pratinjau di Surat</h2>
                         <span
                             x-show="previewUrl"
                             x-cloak
-                            class="shrink-0 rounded-md border border-green-700 bg-green-50 px-2 py-0.5 text-xs font-medium text-green-800"
+                            class="rounded-full bg-brand-soft px-2.5 py-0.5 text-xs font-semibold text-brand-ink"
                         >
                             Pratinjau baru
                         </span>
                     </div>
 
-                    <div class="mt-4 rounded-lg border border-gray-300 bg-white px-5 py-6">
-                        <div class="border-b border-gray-200 pb-3 text-center">
-                            <p class="text-sm font-semibold text-green-800">
-                                PD Pemuda Persis Kab. Bandung
-                            </p>
-                            <p class="mt-0.5 text-xs text-gray-600">
-                                Blok pengesahan surat resmi
-                            </p>
+                    <div class="px-6 py-7 sm:px-7">
+                        <div class="border-b border-stone-line pb-4 text-center">
+                            <p class="text-[10px] font-semibold uppercase tracking-[0.16em] text-ink-muted">Pimpinan Daerah</p>
+                            <p class="mt-0.5 text-xs font-bold uppercase tracking-wider text-pine">Pemuda Persis Kab. Bandung</p>
                         </div>
 
-                        <div class="mt-5 flex flex-col items-center text-center">
-                            <p class="text-sm font-medium text-gray-700">{{ $userRoleName }}</p>
+                        <div class="mt-5 space-y-2" aria-hidden="true">
+                            <div class="h-2 w-full rounded-full bg-stone-soft"></div>
+                            <div class="h-2 w-11/12 rounded-full bg-stone-soft"></div>
+                            <div class="h-2 w-3/5 rounded-full bg-stone-soft"></div>
+                        </div>
 
-                            <div class="my-3 flex h-24 w-full max-w-[240px] items-center justify-center">
-                                <img
-                                    x-show="activePreviewUrl"
-                                    @if ($hasActiveSignature) src="{{ $signatureUrl }}" @endif
-                                    :src="activePreviewUrl"
-                                    alt="Simulasi tampilan tanda tangan {{ $user->name }} pada surat resmi"
-                                    width="220"
-                                    height="88"
-                                    class="max-h-20 max-w-full w-auto object-contain"
-                                    @if (! $hasActiveSignature) x-cloak @endif
-                                >
-                                <div
-                                    x-show="!activePreviewUrl"
-                                    @if ($hasActiveSignature) x-cloak @endif
-                                    class="flex h-20 w-full items-center justify-center rounded-md border border-dashed border-gray-500 bg-gray-50 px-3 text-xs font-medium text-gray-600"
-                                >
-                                    Belum diunggah
+                        <div class="mt-8 flex justify-end">
+                            <div class="w-full max-w-[230px] text-center">
+                                <p class="text-xs font-medium text-ink-muted">{{ $userRoleName }},</p>
+
+                                <div class="my-2.5 flex h-24 w-full items-center justify-center">
+                                    <img
+                                        x-show="activePreviewUrl"
+                                        @if ($hasActiveSignature) src="{{ $signatureUrl }}" @endif
+                                        :src="activePreviewUrl"
+                                        alt="Simulasi tanda tangan {{ $user->name }} pada surat resmi"
+                                        width="220"
+                                        height="88"
+                                        class="max-h-20 max-w-full w-auto object-contain"
+                                        @if (! $hasActiveSignature) x-cloak @endif
+                                    >
+                                    <span
+                                        x-show="!activePreviewUrl"
+                                        @if ($hasActiveSignature) x-cloak @endif
+                                        class="text-xs text-ink-muted"
+                                    >
+                                        (Area tanda tangan)
+                                    </span>
                                 </div>
-                            </div>
 
-                            <p class="border-b border-gray-900 pb-0.5 text-sm font-semibold text-gray-900">
-                                {{ $user->name }}
-                            </p>
-                            <p class="mt-1 text-xs text-gray-600">
-                                NPA: {{ $displayNpa }}
-                            </p>
+                                <p class="inline-block border-b border-ink pb-0.5 text-sm font-semibold text-ink">
+                                    {{ $user->name }}
+                                </p>
+                                <p class="mt-1 text-xs tabular-nums text-ink-muted">NPA: {{ $displayNpa }}</p>
+                            </div>
                         </div>
                     </div>
+                </div>
 
-                    <p x-show="previewUrl" x-cloak class="mt-3 text-xs text-gray-600">
-                        Pratinjau di atas berasal dari berkas lokal yang baru Anda pilih dan belum tersimpan ke server.
-                    </p>
-                </section>
-
-                <section class="rounded-xl border border-gray-200 bg-gray-50 p-4 sm:p-5">
-                    <h2 class="text-base font-semibold text-gray-900">Ketentuan Berkas PNG</h2>
-                    <ul class="mt-3 space-y-2.5 text-sm text-gray-700">
+                <div class="px-1">
+                    <h2 class="text-xs font-semibold uppercase tracking-wider text-ink-muted">Catatan Berkas</h2>
+                    <ul class="mt-2.5 space-y-2 text-xs leading-relaxed text-ink-muted">
                         <li class="flex items-start gap-2.5">
-                            <span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-green-700" aria-hidden="true"></span>
-                            <span>Gunakan berkas gambar berformat PNG asli dengan latar belakang transparan agar menyatu rapi di atas kertas surat.</span>
+                            <span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                            <span>Gunakan PNG berlatar transparan agar menyatu dengan kertas surat.</span>
                         </li>
                         <li class="flex items-start gap-2.5">
-                            <span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-green-700" aria-hidden="true"></span>
-                            <span>Ukuran berkas maksimal 2 MB dengan dimensi minimal 80 x 40 piksel dan maksimal 3000 x 3000 piksel.</span>
+                            <span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                            <span>Potong area kosong berlebih di sekitar goresan tanda tangan.</span>
                         </li>
                         <li class="flex items-start gap-2.5">
-                            <span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-green-700" aria-hidden="true"></span>
-                            <span>Potong area kosong berlebih di sekeliling goresan tanda tangan supaya proporsinya pas di atas nama dan NPA.</span>
-                        </li>
-                        <li class="flex items-start gap-2.5">
-                            <span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-green-700" aria-hidden="true"></span>
-                            <span>Berkas yang diunggah disimpan di penyimpanan privat aplikasi dan hanya dapat diakses oleh pemilik akun.</span>
+                            <span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
+                            <span>File disimpan privat dan hanya dapat diakses oleh akun Anda.</span>
                         </li>
                     </ul>
-                </section>
+                </div>
             </aside>
         </div>
 
@@ -452,37 +375,28 @@
             >
                 <div
                     @click="closeDeleteModal()"
-                    class="fixed inset-0 bg-gray-900/60"
+                    class="fixed inset-0 bg-pine-deep/55 backdrop-blur-[2px]"
                     aria-hidden="true"
                 ></div>
 
                 <div
                     x-ref="deleteDialogPanel"
-                    class="relative z-10 my-auto w-full max-w-md rounded-xl border border-gray-200 bg-white p-5 sm:p-6 shadow-lg"
+                    class="squircle relative z-10 my-auto w-full max-w-md rounded-2xl border border-stone-line bg-white p-6 shadow-xl"
                 >
-                    <div class="flex items-start gap-3">
-                        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-red-700 bg-red-50 text-red-700">
-                            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.29 3.86l-7.5 13A1 1 0 003.66 18h16.68a1 1 0 00.87-1.5l-7.5-13a1 1 0 00-1.74 0z" />
-                            </svg>
-                        </div>
-                        <div class="min-w-0">
-                            <h2 id="delete-signature-title" class="text-base font-semibold text-gray-900">
-                                Hapus tanda tangan aktif?
-                            </h2>
-                            <p id="delete-signature-description" class="mt-1.5 text-sm text-gray-600">
-                                Tanda tangan aktif akan dinonaktifkan dari akun Anda. Surat keluar yang disetujui tidak dapat dibubuhi tanda tangan hingga Anda mengunggah berkas PNG baru. Riwayat arsip sebelumnya tetap terjaga.
-                            </p>
-                        </div>
-                    </div>
+                    <h2 id="delete-signature-title" class="text-base font-semibold text-ink">
+                        Hapus tanda tangan aktif?
+                    </h2>
+                    <p id="delete-signature-description" class="mt-2 text-sm leading-relaxed text-ink-muted">
+                        Tanda tangan aktif akan dinonaktifkan dari akun Anda hingga Anda mengunggah file PNG baru. Riwayat arsip lama tetap tersimpan.
+                    </p>
 
-                    <div class="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+                    <div class="mt-6 flex flex-col-reverse gap-2.5 sm:flex-row sm:justify-end">
                         <button
                             type="button"
                             x-ref="cancelDeleteBtn"
                             @click="closeDeleteModal()"
                             :disabled="deleting"
-                            class="inline-flex min-h-[44px] w-full sm:w-auto items-center justify-center rounded-lg border border-gray-500 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 active:bg-gray-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-700 focus-visible:ring-offset-2 disabled:bg-gray-200 disabled:text-gray-600"
+                            class="inline-flex min-h-[44px] w-full items-center justify-center rounded-xl border border-stone-line bg-white px-4 py-2 text-sm font-medium text-ink transition-colors duration-150 ease-spring hover:bg-alabaster active:bg-stone-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 disabled:opacity-60 sm:w-auto"
                         >
                             Batal
                         </button>
@@ -499,7 +413,7 @@
                                 type="submit"
                                 :disabled="deleting"
                                 :aria-busy="deleting ? 'true' : 'false'"
-                                class="inline-flex min-h-[44px] w-full sm:w-auto items-center justify-center gap-2 rounded-lg bg-red-700 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-red-800 active:bg-red-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-700 focus-visible:ring-offset-2 disabled:border disabled:border-gray-500 disabled:bg-gray-200 disabled:text-gray-600"
+                                class="inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl bg-danger px-4 py-2 text-sm font-semibold text-white transition-colors duration-150 ease-spring hover:bg-[#7F1D1D] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-danger-border focus-visible:ring-offset-2 disabled:opacity-60 sm:w-auto"
                             >
                                 <svg
                                     x-show="deleting"
@@ -513,7 +427,7 @@
                                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
                                 </svg>
-                                <span x-text="deleting ? 'Menghapus tanda tangan...' : 'Ya, Hapus Tanda Tangan'"></span>
+                                <span x-text="deleting ? 'Menghapus...' : 'Ya, Hapus'">Ya, Hapus</span>
                             </button>
                         </form>
                     </div>
@@ -539,6 +453,8 @@
                 selectedFileMeta: '',
                 clientError: '',
                 isDragging: false,
+                dragDepth: 0,
+                validationToken: 0,
                 submitting: false,
                 confirmDeleteOpen: false,
                 deleting: false,
@@ -557,6 +473,7 @@
                 },
 
                 handleDrop(event) {
+                    this.dragDepth = 0;
                     this.isDragging = false;
                     if (this.submitting) {
                         return;
@@ -572,11 +489,12 @@
                         this.$refs.fileInput.files = transfer.files;
                         this.validateAndPreview(file);
                     } else {
-                        this.clientError = 'Browser ini tidak mendukung lepas berkas langsung. Klik tombol Pilih Berkas PNG.';
+                        this.clientError = 'Browser ini tidak mendukung lepas berkas langsung. Klik tombol Pilih File PNG.';
                     }
                 },
 
                 validateAndPreview(file) {
+                    const token = ++this.validationToken;
                     this.clientError = '';
                     this.hasServerError = false;
 
@@ -589,12 +507,12 @@
                     const isPngMime = file.type === 'image/png';
                     const isPngExt = lowerName.endsWith('.png');
                     if (!isPngMime && !(file.type === '' && isPngExt)) {
-                        this.rejectFile('Format berkas tidak didukung. Pilih gambar berformat PNG (.png).');
+                        this.rejectFile('Format file tidak didukung. Pilih gambar PNG (.png).');
                         return;
                     }
 
                     if (file.size > this.maxBytes) {
-                        this.rejectFile('Ukuran berkas melebihi batas 2 MB. Perkecil ukuran berkas PNG sebelum mengunggah.');
+                        this.rejectFile('Ukuran file melebihi 2 MB.');
                         return;
                     }
 
@@ -602,30 +520,38 @@
                     const probe = new Image();
 
                     probe.onload = () => {
+                        if (token !== this.validationToken) {
+                            URL.revokeObjectURL(objectUrl);
+                            return;
+                        }
+
                         const width = probe.naturalWidth;
                         const height = probe.naturalHeight;
 
                         if (width < this.minWidth || height < this.minHeight) {
                             URL.revokeObjectURL(objectUrl);
-                            this.rejectFile('Dimensi gambar terlalu kecil. Minimal 80 x 40 piksel agar tanda tangan terbaca jelas.');
+                            this.rejectFile('Dimensi terlalu kecil. Minimal 80 x 40 piksel.');
                             return;
                         }
 
                         if (width > this.maxWidth || height > this.maxHeight) {
                             URL.revokeObjectURL(objectUrl);
-                            this.rejectFile('Dimensi gambar terlalu besar. Maksimal 3000 x 3000 piksel.');
+                            this.rejectFile('Dimensi terlalu besar. Maksimal 3000 x 3000 piksel.');
                             return;
                         }
 
                         this.revokePreviewUrl();
                         this.previewUrl = objectUrl;
                         this.selectedFileName = file.name;
-                        this.selectedFileMeta = `${this.formatFileSize(file.size)}, ${width} x ${height} piksel`;
+                        this.selectedFileMeta = `${this.formatFileSize(file.size)}, ${width} x ${height} px`;
                     };
 
                     probe.onerror = () => {
                         URL.revokeObjectURL(objectUrl);
-                        this.rejectFile('Berkas tidak dapat dibaca sebagai gambar PNG yang valid. Pastikan berkas tidak rusak.');
+                        if (token !== this.validationToken) {
+                            return;
+                        }
+                        this.rejectFile('File PNG tidak dapat dibaca atau rusak.');
                     };
 
                     probe.src = objectUrl;
@@ -637,6 +563,7 @@
                 },
 
                 clearSelection() {
+                    this.validationToken++;
                     this.revokePreviewUrl();
                     this.selectedFileName = '';
                     this.selectedFileMeta = '';
@@ -672,7 +599,7 @@
                     if (!hasFile || this.clientError) {
                         event.preventDefault();
                         if (!this.clientError) {
-                            this.clientError = 'Pilih berkas tanda tangan PNG terlebih dahulu sebelum menyimpan.';
+                            this.clientError = 'Pilih file PNG terlebih dahulu sebelum menyimpan.';
                         }
                         this.$refs.fileInput?.focus();
                         return;
