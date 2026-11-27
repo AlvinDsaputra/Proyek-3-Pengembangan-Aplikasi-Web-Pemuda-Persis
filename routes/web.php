@@ -4,6 +4,9 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Modules\SharedCore\Http\Controllers\OrganizationalPeriodController;
 use Modules\SharedCore\Http\Controllers\SignatureController;
+use Modules\SuratKeluar\Http\Controllers\LetterDestinationCodeController;
+use Modules\SuratKeluar\Http\Controllers\LetterTemplateController;
+use Modules\SuratKeluar\Http\Controllers\LetterTypeController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -16,6 +19,19 @@ Route::get('/dashboard', function () {
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    // Surat Keluar — Master Jenis Surat, Kode Tujuan, & Template (DEV-02)
+    Route::prefix('surat-keluar')->name('surat-keluar.')->group(function () {
+        // Endpoint JSON Fetch Template (dapat diakses oleh Sekretaris maupun Bidang Administrasi)
+        Route::get('/api/letter-types/{letter_type}/templates', [LetterTemplateController::class, 'getByLetterType'])
+            ->name('api.templates.by-type');
+
+        // CRUD Master Data (Dikunci Policy khusus Bidang Administrasi)
+        Route::prefix('master')->name('master.')->group(function () {
+            Route::resource('letter-types', LetterTypeController::class)->except(['show']);
+            Route::resource('destination-codes', LetterDestinationCodeController::class)->except(['show']);
+            Route::resource('templates', LetterTemplateController::class)->except(['show']);
+        });
+    });
 });
 
 Route::middleware(['auth', 'permission:shared.periods.manage'])
