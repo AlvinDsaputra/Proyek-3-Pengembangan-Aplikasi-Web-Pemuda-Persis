@@ -1,3 +1,122 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    [x-cloak] {
+        display: none !important;
+    }
+
+    a[href],
+    button,
+    summary,
+    select,
+    label[for],
+    label:has(> input[type="checkbox"], > input[type="radio"]),
+    [role="button"],
+    [role="link"],
+    [role="tab"],
+    [role="menuitem"],
+    [role="option"],
+    [role="switch"],
+    input[type="checkbox"],
+    input[type="radio"],
+    input[type="file"],
+    input[type="submit"],
+    input[type="button"],
+    input[type="reset"],
+    input[type="range"],
+    input[type="color"] {
+        cursor: pointer;
+    }
+
+    :disabled,
+    [aria-disabled="true"] {
+        cursor: not-allowed;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+            scroll-behavior: auto !important;
+        }
+    }
+}
+
+@layer components {
+    .surface-card {
+        @apply rounded-2xl border border-stone-line bg-white shadow-[0_1px_2px_rgba(13,59,46,0.04),0_6px_20px_-8px_rgba(13,59,46,0.08)];
+        corner-shape: squircle;
+    }
+
+    .signature-checkerboard {
+        background-color: #ffffff;
+        background-image:
+            linear-gradient(45deg, #eae6dc 25%, transparent 25%),
+            linear-gradient(-45deg, #eae6dc 25%, transparent 25%),
+            linear-gradient(45deg, transparent 75%, #eae6dc 75%),
+            linear-gradient(-45deg, transparent 75%, #eae6dc 75%);
+        background-size: 16px 16px;
+        background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+    }
+}
+
+@layer utilities {
+    .squircle {
+        corner-shape: squircle;
+    }
+
+    .ease-spring {
+        transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+}
+
+@media (min-width: 1024px) {
+    html.sidebar-collapsed #app-sidebar {
+        width: 76px;
+    }
+
+    html.sidebar-collapsed [data-sidebar-header] {
+        height: auto;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.875rem 0;
+    }
+
+    html.sidebar-collapsed [data-sidebar-brand] {
+        width: 2.75rem;
+        flex: none;
+        justify-content: center;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    html.sidebar-collapsed [data-sidebar-label] {
+        display: none;
+    }
+
+    html.sidebar-collapsed [data-sidebar-divider] {
+        display: block;
+        margin: 0 0.5rem 0.5rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    html.sidebar-collapsed [data-sidebar-item] {
+        justify-content: center;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    html.sidebar-collapsed [data-sidebar-icon-collapse] {
+        display: none;
+    }
+
+    html.sidebar-collapsed [data-sidebar-icon-expand] {
+        display: block;
+    }
+}
