@@ -27,6 +27,7 @@ Route::middleware('auth')->group(function () {
 
         // CRUD Master Data (Dikunci Policy khusus Bidang Administrasi)
         Route::prefix('master')->name('master.')->group(function () {
+            Route::get('/', fn () => redirect()->route('surat-keluar.master.letter-types.index'))->name('index');
             Route::resource('letter-types', LetterTypeController::class)->except(['show']);
             Route::resource('destination-codes', LetterDestinationCodeController::class)->except(['show']);
             Route::resource('templates', LetterTemplateController::class)->except(['show']);
