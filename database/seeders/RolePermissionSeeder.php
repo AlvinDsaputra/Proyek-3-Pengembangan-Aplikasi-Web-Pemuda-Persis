@@ -27,7 +27,9 @@ class RolePermissionSeeder extends Seeder
             ['name' => 'Edit Profil Organisasi',  'slug' => 'shared.org-profile.edit',   'module' => 'SharedCore'],
             // SharedCore — periode kepengurusan
             ['name' => 'Kelola Periode',          'slug' => 'shared.periods.manage',      'module' => 'SharedCore'],
-            // SharedCore — tanda tangan
+            // SharedCore — cap organisasi (dikelola Bidang Administrasi)
+            ['name' => 'Upload Cap Organisasi',   'slug' => 'shared.cap.upload',          'module' => 'SharedCore'],
+            // SharedCore — tanda tangan (hanya Ketua & Sekretaris)
             ['name' => 'Upload Tanda Tangan',     'slug' => 'shared.signature.upload',    'module' => 'SharedCore'],
 
             // SuratKeluar — master data (dikelola Bidang Administrasi)
@@ -84,13 +86,23 @@ class RolePermissionSeeder extends Seeder
 
     private function createRoles(array $permissions): void
     {
-        // Superadmin — kelola sistem, TIDAK bisa setujui surat
+        // Superadmin — HANYA kelola akun, periode, profil org + read-only modul lain
+        // Tidak boleh: upload tanda tangan, master data surat, buat/ubah/hapus konten apapun
         $superadmin = Role::firstOrCreate(['slug' => 'superadmin'], [
             'name' => 'Super Admin',
-            'description' => 'Administrator sistem; kelola pengguna, periode, profil organisasi',
+            'description' => 'Administrator sistem; kelola pengguna, periode, profil organisasi (read-only di modul lain)',
         ]);
         $superadmin->permissions()->sync(
-            collect($permissions)->except('surat.approval.approve')->pluck('id')
+            collect($permissions)->only([
+                'shared.users.view', 'shared.users.create',
+                'shared.users.edit', 'shared.users.toggle-active',
+                'shared.org-profile.view', 'shared.org-profile.edit',
+                'shared.periods.manage',
+                'surat.view',
+                'dokumen.view', 'dokumen.report',
+                'aset.view',
+                'kegiatan.view', 'kegiatan.report.view',
+            ])->pluck('id')
         );
 
         // Ketua — setujui surat, lihat laporan; TIDAK edit konten, TIDAK verifikasi dokumen
@@ -123,8 +135,9 @@ class RolePermissionSeeder extends Seeder
                 'surat-masuk.create', 'surat-masuk.status.update',
                 'dokumen.view', 'dokumen.create', 'dokumen.edit', 'dokumen.delete',
                 'dokumen.set-visibility', 'dokumen.kategori.manage', 'dokumen.report',
-                'aset.view', 'aset.delete',
+                'aset.view', 'aset.edit', 'aset.delete',
                 'kegiatan.view', 'kegiatan.create', 'kegiatan.edit', 'kegiatan.delete',
+                'kegiatan.report.view',
             ])->pluck('id')
         );
 
@@ -136,12 +149,13 @@ class RolePermissionSeeder extends Seeder
         $bidangAdmin->permissions()->sync(
             collect($permissions)->only([
                 'shared.org-profile.view',
-                'shared.signature.upload',
+                'shared.cap.upload',
                 'surat.jenis.manage', 'surat.kode.manage', 'surat.template.manage',
                 'surat.view',
-                'dokumen.view', 'dokumen.create', 'dokumen.kategori.manage',
+                'dokumen.view', 'dokumen.create', 'dokumen.kategori.manage', 'dokumen.report',
                 'aset.view', 'aset.create', 'aset.edit', 'aset.label',
-                'kegiatan.view', 'kegiatan.attendance.manage', 'kegiatan.report.view',
+                'kegiatan.view', 'kegiatan.create', 'kegiatan.edit',
+                'kegiatan.attendance.manage', 'kegiatan.report.view',
             ])->pluck('id')
         );
 
