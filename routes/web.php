@@ -7,10 +7,18 @@ use Modules\SharedCore\Http\Controllers\SignatureController;
 use Modules\SuratKeluar\Http\Controllers\LetterDestinationCodeController;
 use Modules\SuratKeluar\Http\Controllers\LetterTemplateController;
 use Modules\SuratKeluar\Http\Controllers\LetterTypeController;
+use Modules\Kegiatan\Http\Controllers\PublicActivityController;
+
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+// Kegiatan — Katalog & Detail Publik
+Route::get('/kegiatan', [PublicActivityController::class, 'index'])->name('kegiatan.index');
+Route::get('/kegiatan/{id}', [PublicActivityController::class, 'show'])
+    ->whereNumber('id')
+    ->name('kegiatan.show');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
