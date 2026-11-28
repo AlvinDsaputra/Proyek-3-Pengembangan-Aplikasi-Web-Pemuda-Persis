@@ -20,6 +20,8 @@ class DatabaseSeeder extends Seeder
             RolePermissionSeeder::class,
             OrganizationalPeriodSeeder::class,
             UserSeeder::class,
+            LetterTypeSeeder::class,
+            LetterDestinationCodeSeeder::class,
         ]);
     }
 }
